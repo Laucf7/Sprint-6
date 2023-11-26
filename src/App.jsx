@@ -3,6 +3,7 @@ import Checkbox from './components/Checkbox';
 import BudgetForm from './components/BudgetForm';
 import { BudgetProvider } from './components/BudgetContext';
 
+
 const Data = [
   {
     id: 'SEO',

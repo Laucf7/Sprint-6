@@ -14,6 +14,7 @@ const initialState = {
     pages: 1,
     languages: 1,
   },
+  
 };
 
 const reducer = (state, action) => {

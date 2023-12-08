@@ -1,50 +1,56 @@
-import { useContext } from "react";
-import { BudgetContext } from "./BudgetContext";
+import { useBudget } from "./BudgetContext";
 
-const WebConfig = () => {
-    const { checkboxes, webConfig, dispatch } = useContext(BudgetContext);
-    if (!checkboxes.WEB) {
-        return null;
-    }
+function WebConfig() {
+  const {
+    webConfig,
+    onPagesChange,
+    onLanguagesChange,
+  } = useBudget();
 
-    const handlePagesChange = (event) => {
-        const newPages = parseInt(event.target.value, 10);
-        const pages = Math.max(1, newPages);
-        dispatch({ type: 'UPDATE_WEB_CONFIG', webConfig: { ...webConfig, pages } });
-
-    }
-
-    const handleLanguagesChange = (event) => {
-        const newLanguages = parseInt(event.target.value, 10);
-        const languages = Math.max(1, newLanguages); // Establecer un mínimo de 1 para idiomas
-        dispatch({ type: 'UPDATE_WEB_CONFIG', webConfig: { ...webConfig, languages } });
-
-    }
-
-    return (
-        <div className="mt-4">
-            <label className="block mb-2">
-                Pages:
-                <input
-                    type="number"
-                    value={webConfig.pages}
-                    onChange={handlePagesChange}
-                    className="form-input mt-1 block w-full"
-                />
-            </label>
-            <label className="block mb-2">
-                Languages:
-                <input
-                    type="number"
-                    value={webConfig.languages}
-                    onChange={handleLanguagesChange}
-                    className="form-input mt-1 block w-full"
-                />
-            </label>
-        </div>
-    );
-
-};
+  return (
+    <>
+      <div className="mt-4">
+        <label className="flex flex-row mb-2">
+          <span>Número de pàgines:</span>
+          <button 
+          className="btn btn-circle btn-xs ms-2 border-lime-50" 
+          onClick={()=> webConfig.pages > 1 ? onPagesChange(webConfig.pages -1) : null}>
+            -
+          </button>
+          <input
+            type="number"
+            value={webConfig.pages}
+            onChange={(e) => onPagesChange(parseInt(e.target.value, 10))}
+            className="input input-sm w-14 mx-1 text-center border-lime-50"
+          />
+          <button 
+          className="btn btn-circle btn-xs border-lime-50" 
+          onClick={()=> onPagesChange(webConfig.pages + 1)}>
+            +
+          </button>
+        </label>
+        <label className="flex flex-row mb-2">
+          <span>Número de llenguatges:</span>
+          <button 
+          className="btn btn-circle btn-xs ms-2 border-lime-50" 
+          onClick={()=> webConfig.languages > 1? onLanguagesChange(webConfig.languages - 1): null}>
+            -
+          </button>
+          <input
+            type="number"
+            value={webConfig.languages}
+            onChange={(e) => onLanguagesChange(parseInt(e.target.value, 10))}
+            className="input input-sm w-14 mx-1 text-center border-lime-50"
+          />
+          <button 
+          className="btn btn-circle btn-xs border-lime-50" 
+          onClick={()=> onLanguagesChange(webConfig.languages + 1)}>
+            +
+          </button>
+        </label>
+      </div>
+    </>
+  );
+}
 
 export default WebConfig;
-

@@ -1,80 +1,83 @@
-
-import React, { createContext, useReducer, useState } from 'react';
+import { createContext, useContext, useState } from "react";
 
 const BudgetContext = createContext();
 
-const initialState = {
-  checkboxes: {
+export const useBudget = () => {
+  return useContext(BudgetContext);
+};
+
+export const BudgetProvider = ({ children }) => {
+
+  const arrayServices = [
+    {
+      title: 'SEO',
+      description: "Programació d'una web responsive completa",
+      price: 300,
+    },
+    {
+      title: 'ADS',
+      description: "Programació d'una web responsive completa",
+      price: 400,
+    },
+    {
+      title: 'WEB',
+      description: "Programació d'una web responsive completa",
+      price: 500,
+    },
+  ];
+
+  const [services, setServices] = useState({
     SEO: false,
     ADS: false,
     WEB: false,
-  },
-  totalBudget: 0,
-  webConfig: {
+  });
+
+  const handleCheckboxChange = (service) => {
+    setServices({
+      ...services,
+      [service.toUpperCase()]: !services[service.toUpperCase()],
+    });
+  }
+
+  const [webConfig, setWebConfig] = useState({
     pages: 1,
     languages: 1,
-  },
-  
-};
+  });
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'TOGGLE_CHECKBOX':
-      if (action.id === 'WEB' && state.checkboxes.WEB) {
-        
-        return {
-          ...state,
-          checkboxes: {
-            ...state.checkboxes,
-            [action.id]: !state.checkboxes[action.id],
-          },
-          totalBudget: state.totalBudget - action.price - ((state.webConfig.pages-1) + (state.webConfig.languages-1)) * 30,
-          webConfig: { pages: 1, languages: 1 },
-        };
-      } else {
-        
-        return {
-          ...state,
-          checkboxes: {
-            ...state.checkboxes,
-            [action.id]: !state.checkboxes[action.id],
-          },
-          totalBudget: state.totalBudget + (state.checkboxes[action.id] ? -action.price : action.price),
-        };
-      }
-    case 'UPDATE_WEB_CONFIG':
-      return {
-        ...state,
-        webConfig: {
-          ...state.webConfig,
-          ...action.webConfig,
-        },
-        totalBudget:
-          state.totalBudget - (state.webConfig.pages + state.webConfig.languages) * 30 + (action.webConfig.pages + action.webConfig.languages) * 30,
-      };
-    default:
-      return state;
-  }
-};
-
-const BudgetProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { checkboxes, webConfig } = state;
-
-  const handleCheckboxChange = (id, price) => {
-    if (id === 'WEB') {
-      dispatch({ type: 'TOGGLE_CHECKBOX', id, price, webConfig });
-    } else {
-      dispatch({ type: 'TOGGLE_CHECKBOX', id, price });
-    }
+  const onPagesChange = (pages) => {
+    setWebConfig({ ...webConfig, pages });
   };
 
+  const onLanguagesChange = (languages) => {
+    setWebConfig({ ...webConfig, languages });
+  };
+
+  const totalBudget = () => {
+    let total = 0;
+    arrayServices.forEach((service) => {
+      if (services[service.title.toLocaleUpperCase()]) {
+        total += service.price;
+      }
+    });
+    if (services.WEB) {
+      total += (webConfig.pages + webConfig.languages) * 30;
+    }
+    return total;
+  }
+
   return (
-    <BudgetContext.Provider value={{ ...state, dispatch, handleCheckboxChange }}>
+    <BudgetContext.Provider value={
+      {
+        arrayServices,
+        services,
+        handleCheckboxChange,
+        webConfig,
+        onPagesChange,
+        onLanguagesChange,
+        totalBudget
+      }}>
       {children}
     </BudgetContext.Provider>
   );
-};
-
-export { BudgetContext, BudgetProvider };
-
+}
+export default BudgetProvider;

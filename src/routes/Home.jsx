@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 export default function Home() {
     return (
         <div>
-            <div className="border-4 border-teal-400  m-4 p-4 w-3/4 grid place-items-center ">
+            <div className="border-4 border-teal-400  m-4 mx-auto p-4 w-3/4 grid place-items-center ">
                 <h1 className="text-2xl text-slate-100 font-bold">BENVINGUT/DA</h1>
                 <h3 className="text-base text-slate-100 my-6 font-semibold">Propòsit de la Web:</h3>
                 <p>   La nostra web té com a principal propòsit proporcionar als usuaris una manera fàcil i intuïtiva de gestionar els seus pressupostos de projectes web. Ja sigui per a tasques de programació SEO, desenvolupament d'anuncis o creació de pàgines web, la nostra plataforma està dissenyada per simplificar el procés i ajudar-vos a prendre decisions informades.</p>
